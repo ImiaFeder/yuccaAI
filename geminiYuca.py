@@ -2,13 +2,11 @@ from flask import Flask, request, jsonify
 import os
 import google.generativeai as genai
 from pathlib import Path
-from elevenlabs import ElevenLabs
 
 import requests
 
 # Konfigurasi API key
 genai.configure(api_key="AIzaSyDph-qHn3vEm8wbBScbQai0aIqkj-BZC0U")
-eleven_labs_api_key = "sk_f9aced8f1a25d4aecac0d81dd585f9c3ee57d80170529e7f"  # Replace with your Eleven Labs API key
 
 # Konfigurasi model
 generation_config = {
@@ -26,20 +24,6 @@ model = genai.GenerativeModel(
 
 # Membuat Flask app
 app = Flask(__name__)
-
-client = ElevenLabs(api_key=eleven_labs_api_key)
-
-def generate_audio_from_text(text):
-    try:
-        # Using Eleven Labs API to convert text to speech
-        audio_content = client.text_to_speech.convert(
-            voice_id="21m00Tcm4TlvDq8ikWAM",  # Replace with your desired voice ID
-            model_id="eleven_multilingual_v2",  # Use the appropriate model
-            text=text
-        )
-        return audio_content  # Return the audio content (binary)
-    except Exception as e:
-        raise Exception(f"Error generating audio: {str(e)}")
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -293,15 +277,8 @@ def chat():
         # Mengakses teks dari respons dengan cara yang benar
         response_text = response.text  # Menggunakan atribut .text untuk mendapatkan teks
 
-        audio_content = generate_audio_from_text(response_text)
-
-        # Save the audio content to a file
-        speech_file_path = Path(__file__).parent / "speech_jessica.mp3"
-        with open(speech_file_path, 'wb') as out:
-            out.write(audio_content)
-        
         # Mengembalikan hasil chat dalam bentuk JSON
-        return jsonify({"response": response_text, "audio_file": str(speech_file_path)})
+        return jsonify({"response": response_text})
 
 
 
