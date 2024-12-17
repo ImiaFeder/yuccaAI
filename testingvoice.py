@@ -1,29 +1,26 @@
-from elevenlabs import generate, set_api_key
+from deepgram import DeepgramClient, SpeakOptions
 
-# Inisialisasi API key Anda
-set_api_key("YOUR_API_KEY")
+DEEPGRAM_API_KEY = "79553e3503bf7a2c29c604591a4229ce79a9d4ba"
 
-# Parameter teks yang akan diubah ke ucapan
-def convert_text_to_speech(text, voice_id="21m00Tcm4TlvDq8ikWAM", model_id="eleven_multilingual_v2"):
+TEXT = {
+    "text": "Halo namaku yucca, maskot unicorn dari Universitas Ciputra!"
+}
+FILENAME = "audio.mp3"
+
+
+def main():
     try:
-        # Mengonversi teks ke ucapan
-        audio = generate(
-            text=text,
-            voice=voice_id,
-            model=model_id
+        deepgram = DeepgramClient(DEEPGRAM_API_KEY)
+
+        options = SpeakOptions(
+            model="aura-asteria-en",
         )
 
-        # Menyimpan hasil audio ke file mp3
-        output_file = "output_audio.mp3"
-        with open(output_file, "wb") as f:
-            f.write(audio)
-        print(f"Audio berhasil disimpan di: {output_file}")
+        response = deepgram.speak.v("1").save(FILENAME, TEXT, options)
+        print(response.to_json(indent=4))
 
     except Exception as e:
-        print(f"Terjadi kesalahan: {e}")
+        print(f"Exception: {e}")
 
-# Contoh teks
-example_text = "Hello! 你好! Hola! नमस्ते! Bonjour! こんにちは! مرحبا! 안녕하세요! Ciao! Cześć! Привіт! வணக்கம்!"
-
-# Panggil fungsi untuk mengonversi teks ke ucapan
-convert_text_to_speech(example_text)
+if __name__ == "__main__":
+    main()

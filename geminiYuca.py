@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 
 # Konfigurasi API key
-genai.configure(api_key="AIzaSyDph-qHn3vEm8wbBScbQai0aIqkj-BZC0U")
+genai.configure(api_key="")
 
 # Konfigurasi model
 generation_config = {
