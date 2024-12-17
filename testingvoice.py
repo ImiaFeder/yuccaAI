@@ -1,6 +1,6 @@
 from deepgram import DeepgramClient, SpeakOptions
 
-DEEPGRAM_API_KEY = "79553e3503bf7a2c29c604591a4229ce79a9d4ba"
+DEEPGRAM_API_KEY = ""
 
 TEXT = {
     "text": "Halo namaku yucca, maskot unicorn dari Universitas Ciputra!"
