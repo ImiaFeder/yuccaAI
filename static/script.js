@@ -6,6 +6,8 @@ const socket_port = 5001;
 socket = io("http://" + window.location.hostname + ":" + socket_port.toString());
 
 let transcriptBuffer = ""; // Buffer for full transcription
+let silenceTimeout; // Timeout to detect silence
+const SILENCE_DURATION = 1500; // 2 seconds of silence threshold
 
 // Update captions on the webpage
 socket.on("transcription_update", (data) => {
@@ -13,10 +15,22 @@ socket.on("transcription_update", (data) => {
   console.log("data " + data);
   console.log("data transkrip : " + data.transcription);
 
-
   // Append transcription to buffer
   transcriptBuffer += data.transcription + " ";
+
+  // Reset silence timeout whenever new transcription arrives
+  resetSilenceTimeout();
 });
+
+// Reset silence detection timer
+function resetSilenceTimeout() {
+  clearTimeout(silenceTimeout);
+  silenceTimeout = setTimeout(() => {
+    console.log("Silence detected, sending transcription to Gemini...");
+    sendToGemini(transcriptBuffer);
+    transcriptBuffer = ""; // Clear buffer after sending
+  }, SILENCE_DURATION);
+}
 
 // Fetch the microphone stream
 async function getMicrophone() {
@@ -43,7 +57,7 @@ async function openMicrophone(microphone, socket) {
         socket.emit("audio_stream", event.data);
       }
     };
-    microphone.start(1000); // Send data chunks every 1000ms
+    microphone.start(700); // Send data chunks every 700ms
   });
 }
 
@@ -67,16 +81,14 @@ async function stopRecording() {
     console.log("Client: Microphone closed");
     document.body.classList.remove("recording");
 
-    // Send the full transcription to Gemini
+    // Send any remaining transcription to Gemini
     if (transcriptBuffer.length > 0) {
-      console.log("Sending " +transcriptBuffer+" to Gemini... ");
+      console.log("Sending remaining transcription to Gemini...");
       await sendToGemini(transcriptBuffer);
-    } else {
-      console.log("No transcription to send.");
+      transcriptBuffer = ""; // Clear buffer
     }
   }
 }
-
 
 // DOM Content Loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -99,9 +111,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // Send transcript to server
 async function sendToGemini(inputText) {
   try {
-    const response = await fetch(`http://127.0.0.1:8001/send-to-gemini?text=${encodeURIComponent(inputText)}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `http://127.0.0.1:8001/send-to-gemini?text=${encodeURIComponent(inputText)}`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Server error: ${response.statusText}`);
@@ -116,5 +131,3 @@ async function sendToGemini(inputText) {
     console.error("Error sending to Gemini API:", error);
   }
 }
-
-
