@@ -25,9 +25,6 @@ config = DeepgramClientOptions(
     
 )
 
-
-
-
  
 deepgram = DeepgramClient(API_KEY, config)
 
