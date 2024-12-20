@@ -57,7 +57,7 @@ async function openMicrophone(microphone, socket) {
         socket.emit("audio_stream", event.data);
       }
     };
-    microphone.start(700); // Send data chunks every 700ms
+    microphone.start(900); // Send data chunks every 700ms
   });
 }
 
@@ -82,11 +82,11 @@ async function stopRecording() {
     document.body.classList.remove("recording");
 
     // Send any remaining transcription to Gemini
-    if (transcriptBuffer.length > 0) {
-      console.log("Sending remaining transcription to Gemini...");
-      await sendToGemini(transcriptBuffer);
-      transcriptBuffer = ""; // Clear buffer
-    }
+    // if (transcriptBuffer.length > 0) {
+    //   console.log("Sending remaining transcription to Gemini...");
+    //   await sendToGemini(transcriptBuffer);
+    //   transcriptBuffer = ""; // Clear buffer
+    // }
   }
 }
 
@@ -131,3 +131,5 @@ async function sendToGemini(inputText) {
     console.error("Error sending to Gemini API:", error);
   }
 }
+
+

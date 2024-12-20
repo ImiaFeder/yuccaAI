@@ -1,9 +1,6 @@
 import logging
 
-from dotenv import load_dotenv
 from flask import Flask, render_template
-
-load_dotenv()
 
 app = Flask("app_http")
 
