@@ -11,24 +11,24 @@ let audioChunks = []; // Array to buffer incoming audio data chunks
 let soket;
 
 // Function to update the play button based on the current state
-function updatePlayButton() {
-    const playButton = document.getElementById("play-button");
-    const icon = playButton.querySelector(".button-icon");
+// function updatePlayButton() {
+//     const playButton = document.getElementById("play-button");
+//     const icon = playButton.querySelector(".button-icon");
 
-    switch (playState) {
-        case PLAY_STATES.NO_AUDIO:
-            icon.className = "button-icon fa-solid fa-play";
-            break;
-        case PLAY_STATES.LOADING:
-            icon.className = "button-icon fa-solid fa-circle-notch";
-            break;
-        case PLAY_STATES.PLAYING:
-            icon.className = "button-icon fa-solid fa-stop";
-            break;
-        default:
-            break;
-    }
-}
+//     switch (playState) {
+//         case PLAY_STATES.NO_AUDIO:
+//             icon.className = "button-icon fa-solid fa-play";
+//             break;
+//         case PLAY_STATES.LOADING:
+//             icon.className = "button-icon fa-solid fa-circle-notch";
+//             break;
+//         case PLAY_STATES.PLAYING:
+//             icon.className = "button-icon fa-solid fa-stop";
+//             break;
+//         default:
+//             break;
+//     }
+// }
 
 // Function to stop audio
 function stopAudio() {
@@ -51,7 +51,7 @@ function playButtonClick() {
         case PLAY_STATES.PLAYING:
             stopAudio();
             playState = PLAY_STATES.NO_AUDIO;
-            updatePlayButton();
+            // updatePlayButton();
             break;
         default:
             break;
@@ -69,7 +69,7 @@ function sendData(yangdisuarakan) {
     if (!textInput) {
     } else {
         playState = PLAY_STATES.LOADING;
-        updatePlayButton();
+        // updatePlayButton();
 
         // we want to simulate holding a connection open like you would for a websoket
         // that's the reason why we only initialize once
@@ -100,11 +100,11 @@ function sendData(yangdisuarakan) {
                     } else if (msg.type === "Error") {
                         console.error("WebSocket error:", error);
                         playState = PLAY_STATES.NO_AUDIO;
-                        updatePlayButton();
+                        // updatePlayButton();
                     } else if (msg.type === "Close") {
                         console.log("WebSocket closed");
                         playState = PLAY_STATES.NO_AUDIO;
-                        updatePlayButton();
+                        // updatePlayButton();
                     } else if (msg.type === "Flushed") {
                         console.log("Flushed received");
 
@@ -126,13 +126,13 @@ function sendData(yangdisuarakan) {
                                     source.start();
                     
                                     playState = PLAY_STATES.PLAYING;
-                                    updatePlayButton();
+                                    // updatePlayButton();
                     
                                     source.onended = () => {
                                         // Clear the buffer
                                         audioChunks = [];
                                         playState = PLAY_STATES.NO_AUDIO;
-                                        updatePlayButton();
+                                        // updatePlayButton();
                                     };
                                 });
                             };
@@ -159,13 +159,13 @@ function sendData(yangdisuarakan) {
             soket.addEventListener("close", () => {
                 console.log("Close received");
                 playState = PLAY_STATES.NO_AUDIO;
-                updatePlayButton();
+                // updatePlayButton();
             });
 
             soket.addEventListener("error", (error) => {
                 console.error("WebSocket error:", error);
                 playState = PLAY_STATES.NO_AUDIO;
-                updatePlayButton();
+                // updatePlayButton();
             });
         } else {
             const data = {
@@ -177,6 +177,6 @@ function sendData(yangdisuarakan) {
 }
 
 // Event listener for the click event on the play button
-document
-    .getElementById("play-button")
-    .addEventListener("click", playButtonClick);
+// document
+//     .getElementById("play-button")
+//     .addEventListener("click", playButtonClick);
