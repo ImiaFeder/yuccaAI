@@ -62,10 +62,10 @@ function playButtonClick() {
 
 
 // Function to send data to backend via WebSocket
-function sendData() {
+function sendData(yangdisuarakan) {
     const modelSelect = document.getElementById("models");
     const selectedModel = modelSelect.options[modelSelect.selectedIndex].value;
-    const textInput = document.getElementById("gemini-response").innerHTML;
+    const textInput = yangdisuarakan;
     if (!textInput) {
     } else {
         playState = PLAY_STATES.LOADING;

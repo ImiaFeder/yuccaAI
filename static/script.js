@@ -124,9 +124,10 @@ async function sendToGemini(inputText) {
 
     const data = await response.json();
     const geminiResponse = data.response;
-
+    sendData(geminiResponse);
     console.log("Gemini Response:", geminiResponse);
     document.getElementById("gemini-response").innerText = geminiResponse;
+    
   } catch (error) {
     console.error("Error sending to Gemini API:", error);
   }
