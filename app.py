@@ -7,7 +7,7 @@ app = Flask("app_http")
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('Yucca.html')
 
 
 if __name__ == '__main__':
