@@ -16,11 +16,12 @@ load_dotenv()
 app_socketio = Flask("app_socketio")
 socketio = SocketIO(app_socketio, cors_allowed_origins=['http://127.0.0.1:8000'])
 
-API_KEY = "47f25ab92a4a53b7a2f11650386864880bf8e00c"
+# API_KEY = "47f25ab92a4a53b7a2f11650386864880bf8e00c"
+API_KEY = "7fecf1de41abf928e5b3e254186365fc080da0d2"
 
 # Set up client configuration
 config = DeepgramClientOptions(
-    # verbose=logging.WARN,  # Change to logging.INFO or logging.DEBUG for more verbose output
+    verbose=logging.WARN,  # Change to logging.INFO or logging.DEBUG for more verbose output
     options={"keepalive": "true"},
     
 )
